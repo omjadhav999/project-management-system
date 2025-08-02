@@ -5,7 +5,7 @@ import session from "cookie-session";
 import { config } from "./config/app.config";
 import connectDatabase from "./config/database.config";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
-import { HTTPSTATUS } from "./config/http.config";
+// import { HTTPSTATUS } from "./config/http.config";
 import { asyncHandler } from "./middlewares/asyncHandler.middleware";
 import { BadRequestException } from "./utils/appError";
 import { ErrorCodeEnum } from "./enums/error-code.enum";
@@ -55,9 +55,9 @@ app.get(
       "This is a bad request",
       ErrorCodeEnum.AUTH_INVALID_TOKEN
     );
-    return res.status(HTTPSTATUS.OK).json({
-      message: "Hello Subscribe to the channel & share",
-    });
+    // return res.status(HTTPSTATUS.OK).json({
+    //   message: "Hello Subscribe to the channel & share",
+    // });
   })
 );
 
