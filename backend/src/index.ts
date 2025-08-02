@@ -34,8 +34,9 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000,
     secure: false,
     // secure: config.NODE_ENV === "production",
-    httpOnly: true,
+    httpOnly: false,
     sameSite: "none",
+    domain: undefined
   })
 );
 
