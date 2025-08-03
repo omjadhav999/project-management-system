@@ -48,9 +48,9 @@ app.use(
       ttl: 24 * 60 * 60,
     }),
     cookie: {
-      secure: process.env.NODE_ENV === 'production',
+      secure: false, // TEMPORARY: Set to false to test if cookies work
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: 'lax', // TEMPORARY: Change from 'none' to 'lax'
       maxAge: 24 * 60 * 60 * 1000,
     },
   })
