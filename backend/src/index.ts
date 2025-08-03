@@ -79,7 +79,7 @@ app.get(
   })
 );
 
-app.use(`${BASE_PATH}/api/auth`, authRoutes);
+app.use(`${BASE_PATH}/auth`, authRoutes);
 app.use(`${BASE_PATH}/user`, isAuthenticated, userRoutes);
 app.use(`${BASE_PATH}/workspace`, isAuthenticated, workspaceRoutes);
 app.use(`${BASE_PATH}/member`, isAuthenticated, memberRoutes);
