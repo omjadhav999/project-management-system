@@ -11,12 +11,10 @@ export const googleLoginCallback = asyncHandler(
     const currentWorkspace = req.user?.currentWorkspace;
 
     if (!currentWorkspace) {
-      console.log("fijyujmyumj");
       return res.redirect(
         `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=failure`
       );
     }
-    console.log("dfgssrg");
     return res.redirect(
       `${config.FRONTEND_ORIGIN}/workspace/${currentWorkspace}`
     );
@@ -100,7 +98,7 @@ export const logOutController = asyncHandler(
           .json({ error: "Failed to log out" });
       }
       
-      req.session.destroy((destroyErr) => { // ← New way to clear session
+      req.session.destroy((destroyErr) => {
         if (destroyErr) {
           console.error("Session destroy error:", destroyErr);
         }
@@ -110,9 +108,5 @@ export const logOutController = asyncHandler(
         .status(HTTPSTATUS.OK)
         .json({ message: "Logged out successfully" });
     });
-
-    return res
-      .status(HTTPSTATUS.OK)
-      .json({ message: "Logged out successfully" });
   }
 );

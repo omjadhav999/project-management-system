@@ -49,6 +49,12 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  console.log("User in session:", req.user);
+  next();
+});
+
+
 // Initialize Passport and session
 app.use(passport.initialize());
 app.use(passport.session());
@@ -63,7 +69,7 @@ app.get(
 );
 
 app.use(`${BASE_PATH}/auth`, authRoutes);
-app.use(`${BASE_PATH}/user`, userRoutes);
+app.use(`${BASE_PATH}/user`, isAuthenticated, userRoutes);
 app.use(`${BASE_PATH}/workspace`, isAuthenticated, workspaceRoutes);
 app.use(`${BASE_PATH}/member`, isAuthenticated, memberRoutes);
 app.use(`${BASE_PATH}/project`, isAuthenticated, projectRoutes);
