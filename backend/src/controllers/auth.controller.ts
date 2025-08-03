@@ -11,6 +11,7 @@ export const googleLoginCallback = asyncHandler(
     const currentWorkspace = req.user?.currentWorkspace;
 
     if (!currentWorkspace) {
+      console.log("fijyujmyumj");
       return res.redirect(
         `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=failure`
       );
