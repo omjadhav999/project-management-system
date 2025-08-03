@@ -103,6 +103,25 @@ app.use(express.urlencoded({ extended: true }));
 // app.use(passport.session());
 
 // Session middleware with MongoDB store
+// app.use(
+//   session({
+//     secret: config.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     store: MongoStore.create({
+//       mongoUrl: config.MONGO_URI,
+//       collectionName: 'sessions',
+//       ttl: 24 * 60 * 60,
+//     }),
+//     cookie: {
+//       secure: process.env.NODE_ENV === 'production',
+//       httpOnly: true,
+//       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+//       maxAge: 24 * 60 * 60 * 1000,
+//     },
+//   })
+// );
+
 app.use(
   session({
     secret: config.SESSION_SECRET,
@@ -114,9 +133,9 @@ app.use(
       ttl: 24 * 60 * 60,
     }),
     cookie: {
-      secure: process.env.NODE_ENV === 'production',
+      secure: true, // Always true for production HTTPS
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: 'none', // CRITICAL: Required for cross-origin cookies
       maxAge: 24 * 60 * 60 * 1000,
     },
   })
