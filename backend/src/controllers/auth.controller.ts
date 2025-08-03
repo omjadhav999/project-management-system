@@ -109,12 +109,9 @@ export const logOutController = asyncHandler(
         .status(HTTPSTATUS.OK)
         .json({ message: "Logged out successfully" });
     });
-<<<<<<< HEAD
 
     return res
       .status(HTTPSTATUS.OK)
       .json({ message: "Logged out successfully" });
-=======
->>>>>>> 0864e11b5f4b1c2ff7deff276877b4d2a8636f21
   }
 );
