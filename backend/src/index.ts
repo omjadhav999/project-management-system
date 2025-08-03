@@ -86,11 +86,17 @@ app.use(
   })
 );
 
+// app.use((req, res, next) => {
+//   console.log("User in session:", req.user);
+//   next();
+// });
+
 app.use((req, res, next) => {
+  console.log("Session ID:", req.sessionID);
   console.log("User in session:", req.user);
+  console.log("Is authenticated:", req.isAuthenticated?.());
   next();
 });
-
 
 // Initialize Passport and session
 app.use(passport.initialize());
