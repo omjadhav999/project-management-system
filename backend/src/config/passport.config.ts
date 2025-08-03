@@ -64,16 +64,45 @@ passport.use(
 
 // passport.serializeUser((user: any, done) => done(null, user));
 // passport.deserializeUser((user: any, done) => done(null, user));
+// passport.serializeUser((user: any, done) => {
+//   console.log("Serializing user:", user._id);
+//   done(null, user._id);
+// });
+
+// passport.deserializeUser(async (id: string, done) => {
+//   try {
+//     console.log("Deserializing user ID:", id);
+//     const user = await UserModel.findById(id);
+//     console.log("Deserialized user:", user);
+//     done(null, user);
+//   } catch (error) {
+//     console.log("Deserialization error:", error);
+//     done(error, null);
+//   }
+// });
+
 passport.serializeUser((user: any, done) => {
-  console.log("Serializing user:", user._id);
+  console.log("=== SERIALIZING USER ===");
+  console.log("User being serialized:", user);
+  console.log("User ID:", user._id);
   done(null, user._id);
 });
 
 passport.deserializeUser(async (id: string, done) => {
   try {
-    console.log("Deserializing user ID:", id);
+    console.log("=== DESERIALIZING USER (CALLED) ===");
+    console.log("User ID from session:", id);
+    console.log("Type of ID:", typeof id);
+    
     const user = await UserModel.findById(id);
-    console.log("Deserialized user:", user);
+    console.log("Found user:", user ? "YES" : "NO");
+    
+    if (user) {
+      console.log("User found:", user._id);
+    } else {
+      console.log("No user found in database");
+    }
+    
     done(null, user);
   } catch (error) {
     console.log("Deserialization error:", error);
