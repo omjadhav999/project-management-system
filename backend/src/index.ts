@@ -25,9 +25,11 @@ const BASE_PATH = config.BASE_PATH;
 // Enable CORS BEFORE session & passport middleware
 app.use(
   cors({
-    origin: process.env.FRONTEND_ORIGIN, // e.g. "http://localhost:3000"
+    origin: process.env.FRONTEND_ORIGIN,
     credentials: true,
     optionsSuccessStatus: 200,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add this
+    allowedHeaders: ['Content-Type', 'Authorization'], // Add this
   })
 );
 
@@ -35,15 +37,29 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Session middleware
+// app.use(
+//   session({
+//     secret: config.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       secure: false, // Set to true if using HTTPS in production
+//       httpOnly: true, // Recommended for security
+//       sameSite: "lax", // Adjust to "none" if frontend/backend on different domains with HTTPS
+//       maxAge: 24 * 60 * 60 * 1000, // 1 day
+//     },
+//   })
+// );
+
 app.use(
   session({
     secret: config.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // Set to true if using HTTPS in production
-      httpOnly: true, // Recommended for security
-      sameSite: "lax", // Adjust to "none" if frontend/backend on different domains with HTTPS
+      secure: process.env.NODE_ENV === 'production', // Will be true in production with HTTPS
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for cross-origin in production
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     },
   })
