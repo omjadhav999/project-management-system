@@ -1,3 +1,4 @@
+import MongoStore from 'connect-mongo';
 import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
@@ -28,8 +29,8 @@ app.use(
     origin: process.env.FRONTEND_ORIGIN,
     credentials: true,
     optionsSuccessStatus: 200,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add this
-    allowedHeaders: ['Content-Type', 'Authorization'], // Add this
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
@@ -51,15 +52,35 @@ app.use(express.urlencoded({ extended: true }));
 //   })
 // );
 
+// app.use(
+//   session({
+//     secret: config.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       secure: process.env.NODE_ENV === 'production', // Will be true in production with HTTPS
+//       httpOnly: true,
+//       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for cross-origin in production
+//       maxAge: 24 * 60 * 60 * 1000, // 1 day
+//     },
+//   })
+// );
+
+// Session middleware with MongoDB store
 app.use(
   session({
     secret: config.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: config.MONGO_URI,
+      collectionName: 'sessions',
+      ttl: 24 * 60 * 60, // 1 day in seconds
+    }),
     cookie: {
-      secure: process.env.NODE_ENV === 'production', // Will be true in production with HTTPS
+      secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for cross-origin in production
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     },
   })
