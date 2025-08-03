@@ -16,7 +16,7 @@ export const googleLoginCallback = asyncHandler(
         `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=failure`
       );
     }
-
+    console.log("dfgssrg");
     return res.redirect(
       `${config.FRONTEND_ORIGIN}/workspace/${currentWorkspace}`
     );
