@@ -37,91 +37,6 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// // Session middleware
-// // app.use(
-// //   session({
-// //     secret: config.SESSION_SECRET,
-// //     resave: false,
-// //     saveUninitialized: false,
-// //     cookie: {
-// //       secure: false, // Set to true if using HTTPS in production
-// //       httpOnly: true, // Recommended for security
-// //       sameSite: "lax", // Adjust to "none" if frontend/backend on different domains with HTTPS
-// //       maxAge: 24 * 60 * 60 * 1000, // 1 day
-// //     },
-// //   })
-// // );
-
-// // app.use(
-// //   session({
-// //     secret: config.SESSION_SECRET,
-// //     resave: false,
-// //     saveUninitialized: false,
-// //     cookie: {
-// //       secure: process.env.NODE_ENV === 'production', // Will be true in production with HTTPS
-// //       httpOnly: true,
-// //       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for cross-origin in production
-// //       maxAge: 24 * 60 * 60 * 1000, // 1 day
-// //     },
-// //   })
-// // );
-
-// // Session middleware with MongoDB store
-// app.use(
-//   session({
-//     secret: config.SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: false,
-//     store: MongoStore.create({
-//       mongoUrl: config.MONGO_URI,
-//       collectionName: 'sessions',
-//       ttl: 24 * 60 * 60, // 1 day in seconds
-//     }),
-//     cookie: {
-//       secure: process.env.NODE_ENV === 'production',
-//       httpOnly: true,
-//       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-//       maxAge: 24 * 60 * 60 * 1000, // 1 day
-//     },
-//   })
-// );
-
-// // app.use((req, res, next) => {
-// //   console.log("User in session:", req.user);
-// //   next();
-// // });
-
-// app.use((req, res, next) => {
-//   console.log("Session ID:", req.sessionID);
-//   console.log("User in session:", req.user);
-//   console.log("Is authenticated:", req.isAuthenticated?.());
-//   next();
-// });
-
-// // Initialize Passport and session
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-// Session middleware with MongoDB store
-// app.use(
-//   session({
-//     secret: config.SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: false,
-//     store: MongoStore.create({
-//       mongoUrl: config.MONGO_URI,
-//       collectionName: 'sessions',
-//       ttl: 24 * 60 * 60,
-//     }),
-//     cookie: {
-//       secure: process.env.NODE_ENV === 'production',
-//       httpOnly: true,
-//       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-//       maxAge: 24 * 60 * 60 * 1000,
-//     },
-//   })
-// );
-
 app.use(
   session({
     secret: config.SESSION_SECRET,
@@ -133,9 +48,9 @@ app.use(
       ttl: 24 * 60 * 60,
     }),
     cookie: {
-      secure: true, // Always true for production HTTPS
+      secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
-      sameSite: 'none', // CRITICAL: Required for cross-origin cookies
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 24 * 60 * 60 * 1000,
     },
   })
@@ -145,13 +60,26 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Debug middleware AFTER passport
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
+  console.log("=== ENHANCED REQUEST DEBUG ===");
+  console.log("URL:", req.url);
+  console.log("Method:", req.method);
+  console.log("Environment:", process.env.NODE_ENV);
+  console.log("Cookie header:", req.headers.cookie);
   console.log("Session ID:", req.sessionID);
+  console.log("Session exists:", !!req.session);
+  
+  // Safe way to access passport data
+  const sessionData = req.session as any;
+  console.log("Session passport data:", sessionData?.passport);
+  console.log("Full session data:", JSON.stringify(req.session, null, 2));
+  
   console.log("User in session:", req.user);
   console.log("Is authenticated:", req.isAuthenticated?.());
+  console.log("=====================================");
   next();
 });
+
 
 app.get(
   `/`,
