@@ -71,6 +71,24 @@ export const loginController = asyncHandler(
   }
 );
 
+// export const logOutController = asyncHandler(
+//   async (req: Request, res: Response) => {
+//     req.logout((err) => {
+//       if (err) {
+//         console.error("Logout error:", err);
+//         return res
+//           .status(HTTPSTATUS.INTERNAL_SERVER_ERROR)
+//           .json({ error: "Failed to log out" });
+//       }
+//     });
+
+//     req.session = null;
+//     return res
+//       .status(HTTPSTATUS.OK)
+//       .json({ message: "Logged out successfully" });
+//   }
+// );
+
 export const logOutController = asyncHandler(
   async (req: Request, res: Response) => {
     req.logout((err) => {
@@ -80,10 +98,23 @@ export const logOutController = asyncHandler(
           .status(HTTPSTATUS.INTERNAL_SERVER_ERROR)
           .json({ error: "Failed to log out" });
       }
+      
+      req.session.destroy((destroyErr) => { // ← New way to clear session
+        if (destroyErr) {
+          console.error("Session destroy error:", destroyErr);
+        }
+      });
+      
+      return res
+        .status(HTTPSTATUS.OK)
+        .json({ message: "Logged out successfully" });
     });
+<<<<<<< HEAD
 
     return res
       .status(HTTPSTATUS.OK)
       .json({ message: "Logged out successfully" });
+=======
+>>>>>>> 0864e11b5f4b1c2ff7deff276877b4d2a8636f21
   }
 );

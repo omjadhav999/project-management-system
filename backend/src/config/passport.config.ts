@@ -2,6 +2,10 @@ import passport from "passport";
 import { Request } from "express";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as LocalStrategy } from "passport-local";
+<<<<<<< HEAD
+=======
+import UserModel from "../models/user.model";
+>>>>>>> 0864e11b5f4b1c2ff7deff276877b4d2a8636f21
 import { config } from "./app.config";
 import { NotFoundException } from "../utils/appError";
 import { ProviderEnum } from "../enums/account-provider.enum";
@@ -61,5 +65,21 @@ passport.use(
   )
 );
 
-passport.serializeUser((user: any, done) => done(null, user));
-passport.deserializeUser((user: any, done) => done(null, user));
+// passport.serializeUser((user: any, done) => done(null, user));
+// passport.deserializeUser((user: any, done) => done(null, user));
+passport.serializeUser((user: any, done) => {
+  console.log("Serializing user:", user._id);
+  done(null, user._id);
+});
+
+passport.deserializeUser(async (id: string, done) => {
+  try {
+    console.log("Deserializing user ID:", id);
+    const user = await UserModel.findById(id);
+    console.log("Deserialized user:", user);
+    done(null, user);
+  } catch (error) {
+    console.log("Deserialization error:", error);
+    done(error, null);
+  }
+});

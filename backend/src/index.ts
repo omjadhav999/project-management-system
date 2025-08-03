@@ -1,14 +1,15 @@
 import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
-import session from "cookie-session";
+// import session from "cookie-session";
+import session from "express-session";
 import { config } from "./config/app.config";
 import connectDatabase from "./config/database.config";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 import { HTTPSTATUS } from "./config/http.config";
 import { asyncHandler } from "./middlewares/asyncHandler.middleware";
 import { BadRequestException } from "./utils/appError";
-import { ErrorCodeEnum } from "./enums/error-code.enum";
+// import { ErrorCodeEnum } from "./enums/error-code.enum";
 
 import "./config/passport.config";
 import passport from "passport";
@@ -27,14 +28,30 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
+// app.use(
+//   session({
+//     name: "session",
+//     keys: [config.SESSION_SECRET],
+//     maxAge: 24 * 60 * 60 * 1000,
+//     secure: false,
+//     // secure: config.NODE_ENV === "production",
+//     httpOnly: false,
+//     sameSite: "none",
+//     domain: undefined
+//   })
+// );
+
 app.use(
   session({
-    name: "session",
-    keys: [config.SESSION_SECRET],
-    maxAge: 24 * 60 * 60 * 1000,
-    secure: config.NODE_ENV === "production",
-    httpOnly: true,
-    sameSite: "lax",
+    secret: config.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false,
+      httpOnly: false,
+      sameSite: "none",
+      maxAge: 24 * 60 * 60 * 1000
+    }
   })
 );
 
@@ -45,16 +62,17 @@ app.use(
   cors({
     origin:process.env.FRONTEND_ORIGIN ,
     credentials: true,
+    optionsSuccessStatus: 200
   })
 );
 
 app.get(
   `/`,
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    throw new BadRequestException(
-      "This is a bad request",
-      ErrorCodeEnum.AUTH_INVALID_TOKEN
-    );
+    // throw new BadRequestException(
+    //   "This is a bad request",
+    //   ErrorCodeEnum.AUTH_INVALID_TOKEN
+    // );
     return res.status(HTTPSTATUS.OK).json({
       message: "Hello Subscribe to the channel & share",
     });
