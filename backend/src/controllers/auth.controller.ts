@@ -82,7 +82,6 @@ export const logOutController = asyncHandler(
       }
     });
 
-    req.session = null;
     return res
       .status(HTTPSTATUS.OK)
       .json({ message: "Logged out successfully" });
