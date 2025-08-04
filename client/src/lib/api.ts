@@ -38,10 +38,11 @@ export const registerMutationFn = async (data: registerType) =>
 
 export const logoutMutationFn = async () => await API.post("/auth/logout");
 
-export const getCurrentUserQueryFn = async (): Promise<CurrentUserResponseType> => {
-  const response = await API.get(`/user/current`);
-  return response.data;
-};
+export const getCurrentUserQueryFn =
+  async (): Promise<CurrentUserResponseType> => {
+    const response = await API.get(`/user/current`,{withCredentials:true});
+    return response.data;
+  };
 
 //********* WORKSPACE ****************
 //************* */

@@ -15,6 +15,7 @@ export const googleLoginCallback = asyncHandler(
         `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=failure`
       );
     }
+
     return res.redirect(
       `${config.FRONTEND_ORIGIN}/workspace/${currentWorkspace}`
     );
@@ -70,7 +71,6 @@ export const loginController = asyncHandler(
   }
 );
 
-
 export const logOutController = asyncHandler(
   async (req: Request, res: Response) => {
     req.logout((err) => {
@@ -80,16 +80,10 @@ export const logOutController = asyncHandler(
           .status(HTTPSTATUS.INTERNAL_SERVER_ERROR)
           .json({ error: "Failed to log out" });
       }
-      
-      req.session.destroy((destroyErr) => {
-        if (destroyErr) {
-          console.error("Session destroy error:", destroyErr);
-        }
-      });
-      
-      return res
-        .status(HTTPSTATUS.OK)
-        .json({ message: "Logged out successfully" });
     });
+
+    return res
+      .status(HTTPSTATUS.OK)
+      .json({ message: "Logged out successfully" });
   }
 );
