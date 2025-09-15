@@ -42,24 +42,11 @@ app.use(passport.session());
 
 app.use(
   cors({
-    // origin:process.env.FRONTEND_ORIGIN
     origin:process.env.FRONTEND_ORIGIN || "http://localhost:5173",
     credentials: true,
   })
 );
 
-// app.get(
-//   /,
-//   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-//     throw new BadRequestException(
-//       "This is a bad request",
-//       ErrorCodeEnum.AUTH_INVALID_TOKEN
-//     );
-//     return res.status(HTTPSTATUS.OK).json({
-//       message: "Hello Subscribe to the channel & share",
-//     });
-//   })
-// );
 
 app.get(
   `/`,
