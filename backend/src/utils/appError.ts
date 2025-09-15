@@ -13,7 +13,11 @@ export class AppError extends Error {
     super(message);
     this.statusCode = statusCode;
     this.errorCode = errorCode;
-    Error.captureStackTrace(this, this.constructor);
+    
+    // Fix for Node.js compatibility
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    }
   }
 }
 
