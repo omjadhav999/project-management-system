@@ -1,8 +1,6 @@
 import { ChevronDown, Loader } from "lucide-react";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-
 import {
   Command,
   CommandEmpty,
@@ -24,6 +22,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { changeWorkspaceMemberRoleMutationFn } from "@/lib/api";
 import { toast } from "@/hooks/use-toast";
 import { Permissions } from "@/constant";
+
 const AllMembers = () => {
   const { user, hasPermission } = useAuthContext();
 
@@ -81,7 +80,7 @@ const AllMembers = () => {
         const initials = getAvatarFallbackText(name);
         const avatarColor = getAvatarColor(name);
         return (
-          <div className="flex items-center justify-between space-x-4">
+          <div key={member._id || member.userId?._id} className="flex items-center justify-between space-x-4">
             <div className="flex items-center space-x-4">
               <Avatar className="h-8 w-8">
                 <AvatarImage
